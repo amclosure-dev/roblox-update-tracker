@@ -12,7 +12,7 @@ function getacttype(typestr) {
     watching: discord.ActivityType.Watching,
     competing: discord.ActivityType.Competing
   };
-  return map[(typestr || '').toLowerCase()] ?? discord.ActivityType.Watching;
+  return map[(typestr || '').toLowerCase()] ?? null;
 }
 
 function getstatus(statusstr) {
@@ -23,7 +23,7 @@ function getstatus(statusstr) {
     offline: 'invisible',
     invisible: 'invisible'
   };
-  return map[(statusstr || '').toLowerCase()] || 'online';
+  return map[(statusstr || '').toLowerCase()] || null;
 }
 
 const bot = new discord.Client({
@@ -34,15 +34,19 @@ const bot = new discord.Client({
 });
 
 bot.once('clientReady', async () => {
-  bot.user.setPresence({
-    status: getstatus(cfg.status),
-    activities: [
-      {
-        name: cfg.activityname,
-        type: getacttype(cfg.activitytype)
-      }
-    ]
-  });
+  const statusval = getstatus(cfg.status);
+  const typeval = getacttype(cfg.activitytype);
+  if (statusval && typeval !== null) {
+    bot.user.setPresence({
+      status: statusval,
+      activities: [
+        {
+          name: cfg.activityname,
+          type: typeval
+        }
+      ]
+    });
+  }
 
   await commands.initcmds(bot);
 

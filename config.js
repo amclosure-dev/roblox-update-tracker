@@ -20,23 +20,25 @@ if (fs.existsSync(envpath)) {
   }
 }
 
-const rawplatforms = process.env.PLATFORMS || 'windows,mac,ios,android';
+const rawplatforms = process.env.PLATFORMS;
 const parsedplatforms = rawplatforms
-  .toLowerCase()
-  .split(',')
-  .map((p) => p.trim())
-  .filter((p) => ['windows', 'mac', 'ios', 'android'].includes(p));
+  ? rawplatforms
+      .toLowerCase()
+      .split(',')
+      .map((p) => p.trim())
+      .filter((p) => ['windows', 'mac', 'ios', 'android'].includes(p))
+  : [];
 
 const cfg = {
   token: process.env.TOKEN || '',
   chanid: process.env.CHANNEL_ID || '',
   premsg: process.env.PREMESSAGE || '',
-  pollinterval: parseInt(process.env.POLL_INTERVAL, 10) || 60000,
-  embedcolor: process.env.EMBED_COLOR || '#00a2ff',
-  platforms: parsedplatforms.length > 0 ? parsedplatforms : ['windows', 'mac', 'ios', 'android'],
-  status: process.env.STATUS || 'online',
-  activitytype: process.env.ACTIVITY_TYPE || 'watching',
-  activityname: process.env.ACTIVITY_NAME || 'Roblox Updates',
+  pollinterval: process.env.POLL_INTERVAL ? parseInt(process.env.POLL_INTERVAL, 10) : NaN,
+  embedcolor: process.env.EMBED_COLOR || '',
+  platforms: parsedplatforms,
+  status: process.env.STATUS || '',
+  activitytype: process.env.ACTIVITY_TYPE || '',
+  activityname: process.env.ACTIVITY_NAME || '',
   future: (process.env.FUTURE || '').toLowerCase() === 'true',
   reverts: (process.env.REVERTS || '').toLowerCase() === 'true'
 };

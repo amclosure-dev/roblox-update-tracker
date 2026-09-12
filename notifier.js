@@ -2,10 +2,10 @@
 const cfg = require('./config');
 
 function parsecolor(val) {
-  if (!val) return 0x00a2ff;
+  if (!val) return null;
   const hex = val.replace('#', '').replace('0x', '');
   const num = parseInt(hex, 16);
-  return isNaN(num) ? 0x00a2ff : num;
+  return isNaN(num) ? null : num;
 }
 
 function getdownloadurl(platform, hash) {
@@ -49,10 +49,16 @@ function makelatestembed(vers) {
     desc += '• Released: `' + vers.android.builtat + '`\n';
   }
 
-  return new discord.EmbedBuilder()
-    .setColor(parsecolor(cfg.embedcolor))
+  const embed = new discord.EmbedBuilder()
     .setDescription(desc.trim())
     .setTimestamp();
+
+  const colorval = parsecolor(cfg.embedcolor);
+  if (colorval !== null) {
+    embed.setColor(colorval);
+  }
+
+  return embed;
 }
 
 async function sendnotif(bot, ver) {
@@ -89,9 +95,13 @@ async function sendnotif(bot, ver) {
     }
 
     const embed = new discord.EmbedBuilder()
-      .setColor(parsecolor(cfg.embedcolor))
       .setDescription(desc.trim())
       .setTimestamp();
+
+    const colorval = parsecolor(cfg.embedcolor);
+    if (colorval !== null) {
+      embed.setColor(colorval);
+    }
 
     const payload = { embeds: [embed] };
 
