@@ -1,0 +1,12 @@
+{
+  "name": "rblxupd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.18.0"
+  }
+}
